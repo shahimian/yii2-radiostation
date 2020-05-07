@@ -2,6 +2,8 @@
 
 namespace shahimian\radiostation;
 
+use shahimian\radiostation\models\migrations\RadioSource;
+
 /**
  * radiostation module definition class
  */
@@ -19,6 +21,6 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-        // custom initialization code goes here
+        (new RadioSource())->up();
     }
 }
