@@ -3,6 +3,7 @@
 namespace shahimian\radiostation\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "radio_source".
@@ -14,6 +15,9 @@ use Yii;
  */
 class RadioSource extends \yii\db\ActiveRecord
 {
+    public $source_audio_file;
+    public $source_picture_file;
+
     /**
      * {@inheritdoc}
      */
@@ -28,6 +32,8 @@ class RadioSource extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['source_audio_file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'mp3'],
+            [['source_picture_file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpg, png'],
             [['datetime'], 'safe'],
             [['source_audio', 'source_picture'], 'string', 'max' => 255],
         ];
@@ -44,5 +50,14 @@ class RadioSource extends \yii\db\ActiveRecord
             'source_picture' => 'Source Picture',
             'datetime' => 'Datetime',
         ];
+    }
+
+    public function upload(){
+        if($this->validate()){
+            $this->source_audio_file->saveAs('uploads/' . $this->source_audio_file->basename . '.' . $this->source_audio_file->extension);
+            $this->source_picture_file->saveAs('uploads/' . $this->source_picture_file->basename . '.' . $this->source_picture_file->extension);
+            return true;
+        }
+        return false;
     }
 }

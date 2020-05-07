@@ -8,6 +8,7 @@ use shahimian\radiostation\models\RadioSourceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for RadioSource model.
@@ -66,8 +67,12 @@ class DefaultController extends Controller
     {
         $model = new RadioSource();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->source_id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $this->saveAll($model);
+
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->source_id]);
         }
 
         return $this->render('create', [
@@ -86,13 +91,28 @@ class DefaultController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->source_id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $this->saveAll($model);
+
+            if($model->save(false))
+                return $this->redirect(['view', 'id' => $model->source_id]);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function saveAll($model){
+        $model->source_audio_file = UploadedFile::getInstance($model, 'source_audio_file');
+        $model->source_picture_file = UploadedFile::getInstance($model, 'source_picture_file');
+        $model->upload();
+        $filename_picture = $model->source_picture_file->basename . '.' . $model->source_picture_file->extension;
+        $model->source_audio = $model->source_audio_file->basename;
+        $model->source_picture = $filename_picture;
+        $model->datetime = date("Y-m-d H:i:s");
+        return true;
     }
 
     /**

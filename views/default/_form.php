@@ -10,13 +10,11 @@ use yii\widgets\ActiveForm;
 
 <div class="radio-source-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'source_audio')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'source_audio_file')->fileInput() ?>
 
-    <?= $form->field($model, 'source_picture')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'datetime')->textInput() ?>
+    <?= $form->field($model, 'source_picture_file')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
