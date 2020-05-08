@@ -1,0 +1,8 @@
+div#radio-station img {
+    padding: 0 1em 0 1em;
+    width: 360px;
+}
+
+div#radio-station {
+    display: flex;
+}

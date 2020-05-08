@@ -71,7 +71,7 @@ class DefaultController extends Controller
 
             $this->saveAll($model);
 
-            if($model->save())
+            if($model->save(false))
                 return $this->redirect(['view', 'id' => $model->source_id]);
         }
 
@@ -108,9 +108,8 @@ class DefaultController extends Controller
         $model->source_audio_file = UploadedFile::getInstance($model, 'source_audio_file');
         $model->source_picture_file = UploadedFile::getInstance($model, 'source_picture_file');
         $model->upload();
-        $filename_picture = $model->source_picture_file->basename . '.' . $model->source_picture_file->extension;
         $model->source_audio = $model->source_audio_file->basename;
-        $model->source_picture = $filename_picture;
+        $model->source_picture = $model->source_picture_file->basename . '.' . $model->source_picture_file->extension;
         $model->datetime = date("Y-m-d H:i:s");
         return true;
     }
